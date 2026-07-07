@@ -1,0 +1,20 @@
+# Render.com blueprint — deploys the FastAPI backend from backend/Dockerfile.
+# In Render: New + → "Blueprint" → connect this repo. It reads this file.
+# Then set the four `sync: false` env vars in the dashboard (secrets).
+services:
+  - type: web
+    name: iscibinde-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /health
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        sync: false # Neon connection string (postgresql+psycopg://...)
+      - key: CLERK_SECRET_KEY
+        sync: false
+      - key: CLERK_ISSUER
+        sync: false
+      - key: FRONTEND_ORIGIN
+        sync: false # your Vercel URL, e.g. https://iscibinde.vercel.app
