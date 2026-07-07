@@ -10,22 +10,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm typecheck
-      - run: pnpm lint
-      - run: pnpm build
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
         env:
-          # Build needs these present; use placeholder values in CI.
+          # Build needs these present; use placeholder values in CI. The
+          # publishable key is public by design; the secret is a dummy (the
+          # build never calls the Clerk API).
           BACKEND_URL: http://localhost:8000
           NEXT_PUBLIC_SITE_URL: http://localhost:3000
-          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_ci
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_cHJvLXdvbWJhdC0zLmNsZXJrLmFjY291bnRzLmRldiQ
           CLERK_SECRET_KEY: sk_test_ci
 
   backend-quality:
