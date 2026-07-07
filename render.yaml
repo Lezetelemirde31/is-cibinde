@@ -1,7 +1,9 @@
-# Render.com blueprint — deploys the FastAPI backend from backend/Dockerfile.
-# In Render: New + → "Blueprint" → connect this repo. It reads this file.
-# Then set the four `sync: false` env vars in the dashboard (secrets).
+# Render.com blueprint — deploys BOTH the FastAPI backend and the Next.js
+# frontend. In Render: New + → "Blueprint" → connect this repo (or press
+# "Manual sync" on an existing blueprint after pushing changes).
+# Set every `sync: false` env var in the dashboard (they are secrets/config).
 services:
+  # ---- Backend: FastAPI (Docker) ----
   - type: web
     name: iscibinde-api
     runtime: docker
@@ -17,4 +19,24 @@ services:
       - key: CLERK_ISSUER
         sync: false
       - key: FRONTEND_ORIGIN
-        sync: false # your Vercel URL, e.g. https://iscibinde.vercel.app
+        sync: false # the frontend URL, e.g. https://iscibinde-web.onrender.com
+
+  # ---- Frontend: Next.js (Node) ----
+  # Node runtime (not Docker) so NEXT_PUBLIC_* vars are available at build time.
+  - type: web
+    name: iscibinde-web
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: BACKEND_URL
+        sync: false # https://iscibinde-api.onrender.com
+      - key: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+        sync: false
+      - key: CLERK_SECRET_KEY
+        sync: false
+      - key: NEXT_PUBLIC_SITE_URL
+        sync: false # https://iscibinde-web.onrender.com
