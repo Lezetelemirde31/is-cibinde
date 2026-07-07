@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
+  // Standalone output is only needed for the Docker image (server.js). For a
+  // normal Node host (Render/Railway) `next start` must be used, which does not
+  // work with standalone — so we opt in only when NEXT_OUTPUT_STANDALONE=1
+  // (set in the frontend Dockerfile).
+  output: process.env.NEXT_OUTPUT_STANDALONE === "1" ? "standalone" : undefined,
   reactStrictMode: true,
   poweredByHeader: false,
   images: {

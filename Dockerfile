@@ -12,6 +12,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+# Produce the standalone server (server.js) that the runner stage copies below.
+ENV NEXT_OUTPUT_STANDALONE=1
 RUN pnpm build
 
 # --- runner ---
