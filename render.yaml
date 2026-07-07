@@ -28,7 +28,9 @@ services:
     runtime: node
     plan: free
     buildCommand: npm install && npm run build
-    startCommand: npm run start
+    # Bind explicitly to Render's injected $PORT on all interfaces, otherwise
+    # next start may not be reachable by Render's router.
+    startCommand: npx next start -H 0.0.0.0 -p $PORT
     envVars:
       - key: NODE_VERSION
         value: "20"
