@@ -8,6 +8,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { hasApplied } from "@/lib/applications/service";
 import { formatSalary, timeAgo } from "@/lib/utils";
 import { employmentTypeLabels, experienceLevelLabels } from "@/lib/constants";
+import { getDictionary, getLocale } from "@/lib/i18n";
 import { env } from "@/lib/env";
 import { ApplySection } from "./apply-section";
 
@@ -48,9 +49,17 @@ export default async function JobDetailPage({
   const { company, category } = job;
   await incrementJobView(job.id);
 
-  const user = await getCurrentUser();
+  const [user, dict, locale] = await Promise.all([getCurrentUser(), getDictionary(), getLocale()]);
   const applied = user?.role === "job_seeker" ? await hasApplied(job.id) : false;
   const salary = formatSalary(job.salaryMin, job.salaryMax, job.salaryCurrency, job.salaryHidden);
+  const jd = dict.jobDetail;
+  const categoryName = category
+    ? locale === "ru"
+      ? category.nameRu ?? category.nameAz
+      : locale === "en"
+        ? category.nameEn ?? category.nameAz
+        : category.nameAz
+    : null;
 
   // Google Jobs structured data
   const jsonLd = {
@@ -101,8 +110,8 @@ export default async function JobDetailPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <nav className="mb-6 flex items-center gap-2 text-sm text-muted" aria-label="Naviqasiya">
-        <Link href="/jobs" className="link-muted">Vakansiyalar</Link>
+      <nav className="mb-6 flex items-center gap-2 text-sm text-muted" aria-label="Breadcrumb">
+        <Link href="/jobs" className="link-muted">{dict.nav.jobs}</Link>
         <span>/</span>
         <span className="text-ink">{job.title}</span>
       </nav>
@@ -143,34 +152,34 @@ export default async function JobDetailPage({
             )}
             {job.isRemote && (
               <span className="inline-flex items-center gap-1 rounded-full bg-primary-tint px-2.5 py-0.5 text-xs text-primary">
-                <Wifi className="h-3.5 w-3.5" /> Uzaqdan
+                <Wifi className="h-3.5 w-3.5" /> {jd.remote}
               </span>
             )}
-            {category && <Badge>{category.nameAz}</Badge>}
+            {categoryName && <Badge>{categoryName}</Badge>}
           </div>
 
           <article className="mt-8 space-y-6">
-            <Section title="İş haqqında">
+            <Section title={jd.about}>
               {paragraphs(job.description)?.map((p, i) => (
                 <p key={i} className="text-ink/90">{p}</p>
               ))}
             </Section>
             {job.responsibilities && (
-              <Section title="Vəzifə öhdəlikləri">
+              <Section title={jd.responsibilities}>
                 {paragraphs(job.responsibilities)?.map((p, i) => (
                   <p key={i} className="text-ink/90">{p}</p>
                 ))}
               </Section>
             )}
             {job.requirements && (
-              <Section title="Tələblər">
+              <Section title={jd.requirements}>
                 {paragraphs(job.requirements)?.map((p, i) => (
                   <p key={i} className="text-ink/90">{p}</p>
                 ))}
               </Section>
             )}
             {job.skills.length > 0 && (
-              <Section title="Bacarıqlar">
+              <Section title={jd.skills}>
                 <div className="flex flex-wrap gap-2">
                   {job.skills.map((s) => (
                     <Badge key={s}>{s}</Badge>
@@ -185,18 +194,18 @@ export default async function JobDetailPage({
         <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
           <div className="rounded-lg border border-border bg-surface p-5 shadow-card">
             <dl className="space-y-3 text-sm">
-              <Row icon={Briefcase} label="İş növü" value={employmentTypeLabels[job.employmentType]} />
-              <Row icon={MapPin} label="Yer" value={job.isRemote ? "Uzaqdan" : job.city ?? "—"} />
+              <Row icon={Briefcase} label={jd.employmentType} value={employmentTypeLabels[job.employmentType]} />
+              <Row icon={MapPin} label={jd.location} value={job.isRemote ? jd.remote : job.city ?? "—"} />
               <Row
                 icon={Clock}
-                label="Yerləşdirilib"
+                label={jd.posted}
                 value={job.publishedAt ? timeAgo(job.publishedAt) : timeAgo(job.createdAt)}
               />
             </dl>
             {salary && (
               <div className="mt-4 rounded-md bg-primary-tint p-3 text-center">
                 <span className="font-display text-lg font-semibold text-primary">{salary}</span>
-                <p className="text-xs text-muted">aylıq</p>
+                <p className="text-xs text-muted">{jd.monthly}</p>
               </div>
             )}
           </div>
@@ -206,6 +215,7 @@ export default async function JobDetailPage({
             isAuthenticated={Boolean(user)}
             canApply={user?.role === "job_seeker"}
             alreadyApplied={applied}
+            labels={{ ...dict.apply, signIn: dict.nav.signIn, signUp: dict.nav.signUp }}
           />
         </aside>
       </div>

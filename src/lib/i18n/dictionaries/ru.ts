@@ -63,6 +63,29 @@ export const ru: Dictionary = {
     empty: "Проверенных компаний пока нет.",
     openJobs: "вакансий"
   },
+  jobDetail: {
+    about: "О вакансии",
+    responsibilities: "Обязанности",
+    requirements: "Требования",
+    skills: "Навыки",
+    employmentType: "Тип занятости",
+    location: "Местоположение",
+    posted: "Опубликовано",
+    monthly: "в месяц",
+    remote: "Удалённо",
+    notFound: "Вакансия не найдена"
+  },
+  apply: {
+    signInPrompt: "Войдите или создайте аккаунт, чтобы откликнуться.",
+    employerCannotApply: "Аккаунты работодателей не могут откликаться на вакансии.",
+    applied: "Ваш отклик отправлен. Отслеживайте статус в панели.",
+    applyButton: "Откликнуться",
+    coverLetterLabel: "Короткое сопроводительное письмо (необязательно)",
+    coverLetterPlaceholder: "Кратко объясните, почему вы подходите…",
+    submitting: "Отправка…",
+    submit: "Отправить отклик",
+    cancel: "Отмена"
+  },
   footer: {
     seekers: "Соискателям",
     employers: "Работодателям",

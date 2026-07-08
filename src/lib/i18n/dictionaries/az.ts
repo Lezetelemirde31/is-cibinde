@@ -63,6 +63,29 @@ export const az = {
     empty: "Hələ yoxlanılmış şirkət yoxdur.",
     openJobs: "vakansiya"
   },
+  jobDetail: {
+    about: "İş haqqında",
+    responsibilities: "Vəzifə öhdəlikləri",
+    requirements: "Tələblər",
+    skills: "Bacarıqlar",
+    employmentType: "İş növü",
+    location: "Yer",
+    posted: "Yerləşdirilib",
+    monthly: "aylıq",
+    remote: "Uzaqdan",
+    notFound: "Vakansiya tapılmadı"
+  },
+  apply: {
+    signInPrompt: "Müraciət etmək üçün daxil ol və ya hesab yarat.",
+    employerCannotApply: "İşəgötürən hesabı ilə vakansiyalara müraciət edilə bilməz.",
+    applied: "Müraciətin göndərildi. Statusu paneldən izləyə bilərsən.",
+    applyButton: "Müraciət et",
+    coverLetterLabel: "Qısa müraciət məktubu (istəyə bağlı)",
+    coverLetterPlaceholder: "Niyə bu vəzifə üçün uyğun olduğunu qısaca yaz…",
+    submitting: "Göndərilir…",
+    submit: "Müraciəti göndər",
+    cancel: "Ləğv et"
+  },
   footer: {
     seekers: "İş axtaranlar",
     employers: "İşəgötürənlər",

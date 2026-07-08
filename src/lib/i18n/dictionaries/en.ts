@@ -63,6 +63,29 @@ export const en: Dictionary = {
     empty: "No verified companies yet.",
     openJobs: "jobs"
   },
+  jobDetail: {
+    about: "About the role",
+    responsibilities: "Responsibilities",
+    requirements: "Requirements",
+    skills: "Skills",
+    employmentType: "Employment type",
+    location: "Location",
+    posted: "Posted",
+    monthly: "monthly",
+    remote: "Remote",
+    notFound: "Job not found"
+  },
+  apply: {
+    signInPrompt: "Sign in or create an account to apply.",
+    employerCannotApply: "Employer accounts can't apply to jobs.",
+    applied: "Your application has been sent. Track its status in your dashboard.",
+    applyButton: "Apply",
+    coverLetterLabel: "Short cover letter (optional)",
+    coverLetterPlaceholder: "Briefly explain why you're a good fit…",
+    submitting: "Sending…",
+    submit: "Send application",
+    cancel: "Cancel"
+  },
   footer: {
     seekers: "Job seekers",
     employers: "Employers",
