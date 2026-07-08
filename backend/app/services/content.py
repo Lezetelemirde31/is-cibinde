@@ -1,7 +1,13 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.models import BlogPost, Company, ContactMessage, Faq, Job
+from app.models import BlogPost, Category, Company, ContactMessage, Faq, Job
+
+
+def list_categories(db: Session):
+    return db.scalars(
+        select(Category).order_by(Category.sort_order.asc(), Category.name_az.asc())
+    ).all()
 
 
 def list_published_posts(db: Session):

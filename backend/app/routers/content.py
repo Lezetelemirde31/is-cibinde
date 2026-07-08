@@ -2,10 +2,15 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.deps import DbDep
-from app.schemas import BlogPostDetail, BlogPostListItem, ContactIn, FaqOut, SitemapData
+from app.schemas import BlogPostDetail, BlogPostListItem, CategoryOut, ContactIn, FaqOut, SitemapData
 from app.services import content as content_service
 
 router = APIRouter(tags=["content"])
+
+
+@router.get("/content/categories", response_model=list[CategoryOut])
+def list_categories(db: Session = DbDep):
+    return content_service.list_categories(db)
 
 
 @router.get("/content/blog", response_model=list[BlogPostListItem])

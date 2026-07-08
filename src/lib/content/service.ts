@@ -29,6 +29,18 @@ export async function getBlogPost(slug: string): Promise<BlogPostDetail | null> 
   }
 }
 
+export type Category = {
+  id: string;
+  slug: string;
+  nameAz: string;
+  nameRu: string | null;
+  nameEn: string | null;
+};
+
+export async function listCategories(): Promise<Category[]> {
+  return apiFetch("/content/categories", { auth: false, next: { revalidate: 3600 } });
+}
+
 export type Faq = { id: string; question: string; answer: string; audience: string };
 
 export async function listFaqs(): Promise<Faq[]> {

@@ -5,7 +5,8 @@ import { JobCard } from "@/components/jobs/job-card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Pagination } from "@/components/ui/pagination";
 import { listJobs } from "@/lib/jobs/service";
-import { getDictionary } from "@/lib/i18n";
+import { listCategories } from "@/lib/content/service";
+import { getDictionary, getLocale } from "@/lib/i18n";
 
 export const metadata: Metadata = {
   title: "Vakansiyalar",
@@ -24,18 +25,26 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
   const sp = await searchParams;
   const page = Number(sp.page ?? 1) || 1;
 
-  const [{ items, total, pageSize }, dict] = await Promise.all([
+  const [{ items, total, pageSize }, dict, categories, locale] = await Promise.all([
     listJobs({
       q: sp.q,
       city: sp.city,
+      categoryId: sp.categoryId,
       employmentType: sp.employmentType,
       experienceLevel: sp.experienceLevel,
       remote: sp.remote === "1",
       page
     }),
-    getDictionary()
+    getDictionary(),
+    listCategories().catch(() => []),
+    getLocale()
   ]);
   const j = dict.jobs;
+
+  const categoryOptions = categories.map((c) => ({
+    value: c.id,
+    label: locale === "ru" ? c.nameRu ?? c.nameAz : locale === "en" ? c.nameEn ?? c.nameAz : c.nameAz
+  }));
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
@@ -59,8 +68,10 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
           search: j.searchPlaceholder,
           typeAll: j.typeAll,
           experienceAll: j.experienceAll,
-          cityAll: j.cityAll
+          cityAll: j.cityAll,
+          categoryAll: j.categoryAll
         }}
+        categories={categoryOptions}
       />
 
       <div className="mt-6">

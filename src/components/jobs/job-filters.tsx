@@ -11,9 +11,18 @@ export type JobFilterLabels = {
   typeAll: string;
   experienceAll: string;
   cityAll: string;
+  categoryAll: string;
 };
 
-export function JobFilters({ labels }: { labels: JobFilterLabels }) {
+export type CategoryOption = { value: string; label: string };
+
+export function JobFilters({
+  labels,
+  categories
+}: {
+  labels: JobFilterLabels;
+  categories: CategoryOption[];
+}) {
   const router = useRouter();
   const params = useSearchParams();
 
@@ -26,7 +35,7 @@ export function JobFilters({ labels }: { labels: JobFilterLabels }) {
   }
 
   return (
-    <div className="grid gap-3 rounded-lg border border-border bg-surface p-4 shadow-card sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-3 rounded-lg border border-border bg-surface p-4 shadow-card sm:grid-cols-2 lg:grid-cols-5">
       <form
         className="relative sm:col-span-2 lg:col-span-1"
         onSubmit={(e) => {
@@ -69,6 +78,17 @@ export function JobFilters({ labels }: { labels: JobFilterLabels }) {
         <option value="">{labels.cityAll}</option>
         {azCities.map((c) => (
           <option key={c} value={c}>{c}</option>
+        ))}
+      </Select>
+
+      <Select
+        defaultValue={params.get("categoryId") ?? ""}
+        onChange={(e) => update("categoryId", e.target.value)}
+        aria-label={labels.categoryAll}
+      >
+        <option value="">{labels.categoryAll}</option>
+        {categories.map((c) => (
+          <option key={c.value} value={c.value}>{c.label}</option>
         ))}
       </Select>
     </div>
