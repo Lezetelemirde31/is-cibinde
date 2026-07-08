@@ -6,7 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { employmentTypeLabels, experienceLevelLabels, azCities } from "@/lib/constants";
 
-export function JobFilters() {
+export type JobFilterLabels = {
+  search: string;
+  typeAll: string;
+  experienceAll: string;
+  cityAll: string;
+};
+
+export function JobFilters({ labels }: { labels: JobFilterLabels }) {
   const router = useRouter();
   const params = useSearchParams();
 
@@ -29,15 +36,15 @@ export function JobFilters() {
         }}
       >
         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
-        <Input name="q" defaultValue={params.get("q") ?? ""} placeholder="Axtar" className="pl-9" />
+        <Input name="q" defaultValue={params.get("q") ?? ""} placeholder={labels.search} className="pl-9" />
       </form>
 
       <Select
         defaultValue={params.get("employmentType") ?? ""}
         onChange={(e) => update("employmentType", e.target.value)}
-        aria-label="İş növü"
+        aria-label={labels.typeAll}
       >
-        <option value="">İş növü — hamısı</option>
+        <option value="">{labels.typeAll}</option>
         {Object.entries(employmentTypeLabels).map(([v, l]) => (
           <option key={v} value={v}>{l}</option>
         ))}
@@ -46,9 +53,9 @@ export function JobFilters() {
       <Select
         defaultValue={params.get("experienceLevel") ?? ""}
         onChange={(e) => update("experienceLevel", e.target.value)}
-        aria-label="Təcrübə"
+        aria-label={labels.experienceAll}
       >
-        <option value="">Təcrübə — hamısı</option>
+        <option value="">{labels.experienceAll}</option>
         {Object.entries(experienceLevelLabels).map(([v, l]) => (
           <option key={v} value={v}>{l}</option>
         ))}
@@ -57,9 +64,9 @@ export function JobFilters() {
       <Select
         defaultValue={params.get("city") ?? ""}
         onChange={(e) => update("city", e.target.value)}
-        aria-label="Şəhər"
+        aria-label={labels.cityAll}
       >
-        <option value="">Şəhər — hamısı</option>
+        <option value="">{labels.cityAll}</option>
         {azCities.map((c) => (
           <option key={c} value={c}>{c}</option>
         ))}

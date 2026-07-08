@@ -5,6 +5,7 @@ import { JobCard } from "@/components/jobs/job-card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Pagination } from "@/components/ui/pagination";
 import { listJobs } from "@/lib/jobs/service";
+import { getDictionary } from "@/lib/i18n";
 
 export const metadata: Metadata = {
   title: "Vakansiyalar",
@@ -23,14 +24,18 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
   const sp = await searchParams;
   const page = Number(sp.page ?? 1) || 1;
 
-  const { items, total, pageSize } = await listJobs({
-    q: sp.q,
-    city: sp.city,
-    employmentType: sp.employmentType,
-    experienceLevel: sp.experienceLevel,
-    remote: sp.remote === "1",
-    page
-  });
+  const [{ items, total, pageSize }, dict] = await Promise.all([
+    listJobs({
+      q: sp.q,
+      city: sp.city,
+      employmentType: sp.employmentType,
+      experienceLevel: sp.experienceLevel,
+      remote: sp.remote === "1",
+      page
+    }),
+    getDictionary()
+  ]);
+  const j = dict.jobs;
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
@@ -43,13 +48,20 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
   return (
     <div className="container-page py-10">
       <div className="mb-6">
-        <h1 className="font-display text-3xl font-bold text-ink">Vakansiyalar</h1>
+        <h1 className="font-display text-3xl font-bold text-ink">{j.title}</h1>
         <p className="mt-1 text-muted" aria-live="polite">
-          {total} aktiv vakansiya tapıldı
+          {total} {j.found}
         </p>
       </div>
 
-      <JobFilters />
+      <JobFilters
+        labels={{
+          search: j.searchPlaceholder,
+          typeAll: j.typeAll,
+          experienceAll: j.experienceAll,
+          cityAll: j.cityAll
+        }}
+      />
 
       <div className="mt-6">
         {items.length ? (
@@ -59,11 +71,7 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
             ))}
           </div>
         ) : (
-          <EmptyState
-            icon={Search}
-            title="Vakansiya tapılmadı"
-            description="Bu meyarlara uyğun vakansiya tapılmadı. Filtri dəyişib yenidən yoxlayın."
-          />
+          <EmptyState icon={Search} title={j.emptyTitle} description={j.emptyText} />
         )}
       </div>
 

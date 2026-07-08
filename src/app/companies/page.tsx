@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Building2, MapPin } from "lucide-react";
 import { listCompanies } from "@/lib/companies/service";
+import { getDictionary } from "@/lib/i18n";
 
 export const metadata: Metadata = {
   title: "Şirkətlər",
@@ -20,16 +21,20 @@ export default async function CompaniesPage({
   searchParams: Promise<{ q?: string; page?: string }>;
 }) {
   const sp = await searchParams;
-  const { items } = await listCompanies({ q: sp.q, page: Number(sp.page ?? 1) || 1 });
+  const [{ items }, dict] = await Promise.all([
+    listCompanies({ q: sp.q, page: Number(sp.page ?? 1) || 1 }),
+    getDictionary()
+  ]);
+  const t = dict.companies;
 
   return (
     <div className="container-page py-10">
-      <h1 className="font-display text-3xl font-bold text-ink">Şirkətlər</h1>
-      <p className="mt-1 mb-6 text-muted">Yoxlanılmış işəgötürənləri kəşf et.</p>
+      <h1 className="font-display text-3xl font-bold text-ink">{t.title}</h1>
+      <p className="mt-1 mb-6 text-muted">{t.subtitle}</p>
 
       {items.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border p-16 text-center text-muted">
-          Hələ yoxlanılmış şirkət yoxdur.
+          {t.empty}
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -53,7 +58,7 @@ export default async function CompaniesPage({
                 <span className="inline-flex items-center gap-1">
                   <MapPin className="h-3.5 w-3.5" /> {c.city ?? "Azərbaycan"}
                 </span>
-                <span className="font-medium text-primary">{c.openJobs} vakansiya</span>
+                <span className="font-medium text-primary">{c.openJobs} {t.openJobs}</span>
               </div>
             </Link>
           ))}
