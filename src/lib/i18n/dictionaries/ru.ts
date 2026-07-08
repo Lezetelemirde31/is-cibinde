@@ -73,6 +73,12 @@ export const ru: Dictionary = {
     panelText:
       "Тысячи вакансий, проверенные компании и все ваши отклики в одном месте."
   },
+  notifications: {
+    title: "Уведомления",
+    markAllRead: "Отметить все как прочитанные",
+    empty: "Уведомлений пока нет",
+    ariaLabel: "Уведомления"
+  },
   common: {
     languageLabel: "Язык"
   }

@@ -3,11 +3,27 @@ import { Briefcase } from "lucide-react";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { ButtonLink } from "@/components/ui/button";
 import { getDictionary, getLocale } from "@/lib/i18n";
+import { getCurrentUser } from "@/lib/auth";
+import { listNotifications, unreadCount } from "@/lib/notifications/service";
 import { NavLinks } from "./nav-links";
 import { LanguageSwitcher } from "./language-switcher";
+import { NotificationBell } from "./notification-bell";
 
 export async function Navbar() {
-  const [dict, locale] = await Promise.all([getDictionary(), getLocale()]);
+  const [dict, locale, user] = await Promise.all([
+    getDictionary(),
+    getLocale(),
+    getCurrentUser()
+  ]);
+
+  let bell = null;
+  if (user) {
+    const [items, unread] = await Promise.all([
+      listNotifications(10).catch(() => []),
+      unreadCount().catch(() => 0)
+    ]);
+    bell = <NotificationBell items={items} unread={unread} labels={dict.notifications} />;
+  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-surface/80 backdrop-blur">
@@ -25,6 +41,7 @@ export async function Navbar() {
 
         <div className="flex items-center gap-2">
           <LanguageSwitcher current={locale} label={dict.common.languageLabel} />
+          {bell}
           <SignedIn>
             <ButtonLink href="/dashboard" variant="secondary" size="sm">
               {dict.nav.dashboard}

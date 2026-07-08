@@ -73,6 +73,12 @@ export const en: Dictionary = {
     panelText:
       "Thousands of vacancies, verified companies, and all your applications tracked in one place."
   },
+  notifications: {
+    title: "Notifications",
+    markAllRead: "Mark all as read",
+    empty: "No notifications yet",
+    ariaLabel: "Notifications"
+  },
   common: {
     languageLabel: "Language"
   }

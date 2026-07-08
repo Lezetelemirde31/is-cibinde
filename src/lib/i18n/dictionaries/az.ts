@@ -73,6 +73,12 @@ export const az = {
     panelText:
       "Minlərlə vakansiya, yoxlanılmış şirkətlər və müraciətlərini bir yerdən izləmək imkanı."
   },
+  notifications: {
+    title: "Bildirişlər",
+    markAllRead: "Hamısını oxundu işarələ",
+    empty: "Hələ bildiriş yoxdur",
+    ariaLabel: "Bildirişlər"
+  },
   common: {
     languageLabel: "Dil"
   }

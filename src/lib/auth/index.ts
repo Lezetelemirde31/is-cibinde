@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 import { apiFetch, ApiError } from "@/lib/api-client";
@@ -20,7 +21,7 @@ export type Role = User["role"];
  * backend provisions the row just-in-time on first sight of a `clerk_id`.
  * Returns null when there is no authenticated session.
  */
-export async function getCurrentUser(): Promise<User | null> {
+export const getCurrentUser = cache(async (): Promise<User | null> => {
   const { userId } = await auth();
   if (!userId) return null;
 
@@ -30,7 +31,7 @@ export async function getCurrentUser(): Promise<User | null> {
     if (err instanceof ApiError && err.status === 401) return null;
     throw err;
   }
-}
+});
 
 /** Redirect to sign-in if not authenticated; returns the user otherwise. */
 export async function requireUser(returnTo = "/dashboard"): Promise<User> {
