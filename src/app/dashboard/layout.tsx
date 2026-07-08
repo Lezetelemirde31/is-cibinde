@@ -10,7 +10,8 @@ import {
   Inbox,
   ShieldCheck,
   Building2,
-  MessageSquare
+  MessageSquare,
+  Activity
 } from "lucide-react";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth";
@@ -37,11 +38,13 @@ const navByRole: Record<string, NavItem[]> = {
   ],
   moderator: [
     { href: "/dashboard", label: "İcmal", icon: LayoutDashboard },
+    { href: "/dashboard/admin/activity", label: "Fəaliyyət", icon: Activity },
     { href: "/dashboard/admin/jobs", label: "Vakansiya moderasiyası", icon: Briefcase },
     { href: "/dashboard/admin/companies", label: "Şirkət təsdiqi", icon: Building2 }
   ],
   admin: [
     { href: "/dashboard", label: "İcmal", icon: LayoutDashboard },
+    { href: "/dashboard/admin/activity", label: "Fəaliyyət", icon: Activity },
     { href: "/dashboard/admin/users", label: "İstifadəçilər", icon: Users },
     { href: "/dashboard/admin/jobs", label: "Vakansiya moderasiyası", icon: Briefcase },
     { href: "/dashboard/admin/companies", label: "Şirkət təsdiqi", icon: Building2 }

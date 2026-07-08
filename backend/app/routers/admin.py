@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.deps import DbDep, require_roles
 from app.models import User
 from app.schemas import (
+    ActivityEvent,
     AdminCompanyRow,
     AdminJobRow,
     AdminUserRow,
@@ -16,6 +17,11 @@ from app.schemas import (
 from app.services import admin as admin_service
 
 router = APIRouter(prefix="/admin", tags=["admin"])
+
+
+@router.get("/activity", response_model=list[ActivityEvent])
+def activity(user: User = Depends(require_roles("admin", "moderator")), db: Session = DbDep):
+    return admin_service.recent_activity(db)
 
 
 @router.get("/jobs", response_model=list[AdminJobRow])

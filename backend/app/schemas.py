@@ -303,6 +303,14 @@ class NotificationOut(BaseModel):
 # ------------------------------------------------------------------ #
 
 
+class ActivityEvent(BaseModel):
+    type: str
+    title: str
+    meta: str | None = None
+    at: datetime
+    href: str | None = None
+
+
 class AdminJobRow(BaseModel):
     id: UUID
     title: str

@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.models import AuditLog, Company, Job, User
+from app.models import Application, AuditLog, Company, Job, User
 from app.services.jobs import set_job_status
 from app.services.notifications import create_notification
 
@@ -112,3 +112,34 @@ def list_companies_for_moderation(db: Session, limit: int = 100):
 
 def list_users_for_admin(db: Session, limit: int = 200):
     return db.scalars(select(User).order_by(User.created_at.desc()).limit(limit)).all()
+
+
+def recent_activity(db: Session, per_source: int = 15, limit: int = 40) -> list[dict]:
+    """A unified 'who did what' feed for the admin panel."""
+    events: list[dict] = []
+
+    for email, role, created in db.execute(
+        select(User.email, User.role, User.created_at).order_by(User.created_at.desc()).limit(per_source)
+    ).all():
+        events.append({"type": "user_registered", "title": email, "meta": role, "at": created, "href": None})
+
+    for job, company in db.execute(
+        select(Job, Company).join(Company, Job.company_id == Company.id).order_by(Job.created_at.desc()).limit(per_source)
+    ).all():
+        events.append({"type": "job_posted", "title": job.title, "meta": company.name, "at": job.created_at, "href": f"/jobs/{job.slug}"})
+
+    for app_row, job in db.execute(
+        select(Application, Job).join(Job, Application.job_id == Job.id).order_by(Application.created_at.desc()).limit(per_source)
+    ).all():
+        events.append({"type": "application", "title": job.title, "meta": None, "at": app_row.created_at, "href": None})
+
+    for company in db.scalars(select(Company).order_by(Company.created_at.desc()).limit(per_source)).all():
+        events.append({"type": "company_registered", "title": company.name, "meta": company.status, "at": company.created_at, "href": f"/companies/{company.slug}"})
+
+    for log, actor in db.execute(
+        select(AuditLog, User).outerjoin(User, AuditLog.actor_id == User.id).order_by(AuditLog.created_at.desc()).limit(per_source)
+    ).all():
+        events.append({"type": "moderation", "title": log.action, "meta": actor.email if actor else None, "at": log.created_at, "href": None})
+
+    events.sort(key=lambda e: e["at"], reverse=True)
+    return events[:limit]

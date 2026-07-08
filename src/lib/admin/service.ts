@@ -53,6 +53,18 @@ export async function listUsersForAdmin(): Promise<AdminUserRow[]> {
   return apiFetch("/admin/users");
 }
 
+export type ActivityEvent = {
+  type: string;
+  title: string;
+  meta: string | null;
+  at: string;
+  href: string | null;
+};
+
+export async function getAdminActivity(): Promise<ActivityEvent[]> {
+  return apiFetch("/admin/activity");
+}
+
 export async function setUserRole(
   userId: string,
   role: "job_seeker" | "employer" | "moderator" | "admin"
