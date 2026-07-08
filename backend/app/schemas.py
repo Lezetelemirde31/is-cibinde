@@ -449,3 +449,23 @@ class SitemapData(BaseModel):
 class DashboardStats(BaseModel):
     role: str
     data: dict[str, Any]
+
+
+class AnalyticsTotals(BaseModel):
+    active_jobs: int
+    total_views: int
+    total_applications: int
+
+
+class AnalyticsJobRow(BaseModel):
+    id: UUID
+    title: str
+    slug: str
+    status: str
+    views: int
+    applications: int
+
+
+class EmployerAnalytics(BaseModel):
+    totals: AnalyticsTotals
+    jobs: list[AnalyticsJobRow]

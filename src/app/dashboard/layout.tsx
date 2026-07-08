@@ -35,6 +35,7 @@ const navByRole: Record<string, NavItem[]> = {
     { href: "/dashboard/employer/jobs", label: "Vakansiyalarım", icon: Briefcase },
     { href: "/dashboard/employer/applications", label: "Müraciətlər", icon: Inbox },
     { href: "/dashboard/employer/candidates", label: "Namizədlər", icon: Users },
+    { href: "/dashboard/employer/analytics", label: "Statistika", icon: Activity },
     { href: "/dashboard/messages", label: "Mesajlar", icon: MessageSquare }
   ],
   moderator: [

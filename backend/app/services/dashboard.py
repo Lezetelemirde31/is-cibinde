@@ -36,6 +36,33 @@ def employer_stats(db: Session, user_id) -> dict:
     return {"has_company": company is not None, "open_jobs": open_jobs or 0, "total_apps": total_apps or 0}
 
 
+def employer_analytics(db: Session, owner_id) -> dict:
+    jobs = db.scalars(
+        select(Job).where(Job.posted_by_id == owner_id).order_by(Job.created_at.desc())
+    ).all()
+    total_views = sum(j.view_count for j in jobs)
+    total_apps = sum(j.application_count for j in jobs)
+    active = sum(1 for j in jobs if j.status == "active")
+    return {
+        "totals": {
+            "active_jobs": active,
+            "total_views": total_views,
+            "total_applications": total_apps,
+        },
+        "jobs": [
+            {
+                "id": j.id,
+                "title": j.title,
+                "slug": j.slug,
+                "status": j.status,
+                "views": j.view_count,
+                "applications": j.application_count,
+            }
+            for j in jobs
+        ],
+    }
+
+
 def staff_stats(db: Session) -> dict:
     pending_jobs = db.scalar(
         select(func.count()).select_from(Job).where(Job.status.in_(["pending_review", "draft"]))

@@ -32,3 +32,12 @@ export type EmployerApplicationRow = {
 export async function myApplications(): Promise<EmployerApplicationRow[]> {
   return apiFetch("/employer/applications");
 }
+
+export type EmployerAnalytics = {
+  totals: { activeJobs: number; totalViews: number; totalApplications: number };
+  jobs: { id: string; title: string; slug: string; status: string; views: number; applications: number }[];
+};
+
+export async function getAnalytics(): Promise<EmployerAnalytics> {
+  return apiFetch("/employer/analytics");
+}
