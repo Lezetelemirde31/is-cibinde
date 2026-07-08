@@ -10,6 +10,7 @@ import { NavLinks } from "./nav-links";
 import { LanguageSwitcher } from "./language-switcher";
 import { NotificationBell } from "./notification-bell";
 import { ThemeToggle } from "./theme-toggle";
+import { MobileMenu } from "./mobile-menu";
 
 export async function Navbar() {
   const [dict, locale, theme, user] = await Promise.all([
@@ -30,14 +31,16 @@ export async function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-surface/80 backdrop-blur">
-      <div className="container-page flex h-16 items-center justify-between gap-6">
-        {/* Left: logo + primary nav grouped together (LinkedIn/Indeed style) */}
-        <div className="flex items-center gap-8">
+      <div className="container-page flex h-16 items-center justify-between gap-3 sm:gap-6">
+        {/* Left: hamburger (mobile) + logo + primary nav (LinkedIn/Indeed style) */}
+        <div className="flex items-center gap-2 md:gap-8">
+          <MobileMenu labels={dict.nav} />
+
           <Link href="/" className="flex items-center gap-2" aria-label="İş Cibində">
             <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-fg">
               <Briefcase className="h-4 w-4" />
             </span>
-            <span className="font-display text-lg font-bold tracking-tight text-ink">
+            <span className="hidden font-display text-lg font-bold tracking-tight text-ink sm:inline">
               İş Cibində
             </span>
           </Link>
