@@ -103,7 +103,13 @@ export const az = {
     q3: "Xidmət pulludurmu?",
     a3: "İş axtaranlar üçün qeydiyyat, profil və müraciət tamamilə pulsuzdur.",
     contactCta: "Başqa sualınız var?",
-    contactButton: "Bizə yazın"
+    contactButton: "Bizə yazın",
+    formName: "Adınız",
+    formEmail: "E-poçt",
+    formMessage: "Mesajınızı yazın…",
+    formSend: "Göndər",
+    formSuccess: "Mesajınız göndərildi! Tezliklə cavab verəcəyik. 🙏",
+    back: "Geri"
   },
   common: {
     languageLabel: "Dil",

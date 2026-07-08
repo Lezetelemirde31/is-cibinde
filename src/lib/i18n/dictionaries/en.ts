@@ -103,7 +103,13 @@ export const en: Dictionary = {
     q3: "Is the service free?",
     a3: "For job seekers, registration, profiles and applications are completely free.",
     contactCta: "Have another question?",
-    contactButton: "Contact us"
+    contactButton: "Contact us",
+    formName: "Your name",
+    formEmail: "Email",
+    formMessage: "Write your message…",
+    formSend: "Send",
+    formSuccess: "Your message has been sent! We'll get back to you soon. 🙏",
+    back: "Back"
   },
   common: {
     languageLabel: "Language",

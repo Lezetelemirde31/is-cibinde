@@ -103,7 +103,13 @@ export const ru: Dictionary = {
     q3: "Сервис бесплатный?",
     a3: "Для соискателей регистрация, профиль и отклики полностью бесплатны.",
     contactCta: "Остались вопросы?",
-    contactButton: "Написать нам"
+    contactButton: "Написать нам",
+    formName: "Ваше имя",
+    formEmail: "Эл. почта",
+    formMessage: "Напишите сообщение…",
+    formSend: "Отправить",
+    formSuccess: "Ваше сообщение отправлено! Мы скоро ответим. 🙏",
+    back: "Назад"
   },
   common: {
     languageLabel: "Язык",
