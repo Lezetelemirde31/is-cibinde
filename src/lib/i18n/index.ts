@@ -1,63 +1,25 @@
-// Lightweight dictionary-based i18n. AZ is the default and complete locale;
-// RU is provided as a second launch locale. Add TR/EN by extending `dictionaries`.
+import "server-only";
+import { cookies } from "next/headers";
+import { defaultLocale, isLocale, LOCALE_COOKIE, type Locale } from "./config";
+import { az, type Dictionary } from "./dictionaries/az";
+import { en } from "./dictionaries/en";
+import { ru } from "./dictionaries/ru";
 
-export const locales = ["az", "ru"] as const;
-export type Locale = (typeof locales)[number];
-export const defaultLocale: Locale = "az";
+export type { Dictionary };
 
-type Dict = Record<string, string>;
+const dictionaries: Record<Locale, Dictionary> = { az, ru, en };
 
-const az: Dict = {
-  "nav.jobs": "Vakansiyalar",
-  "nav.companies": "Şirkətlər",
-  "nav.blog": "Bloq",
-  "nav.about": "Haqqımızda",
-  "nav.contact": "Əlaqə",
-  "nav.login": "Daxil ol",
-  "nav.register": "Qeydiyyat",
-  "nav.dashboard": "Panel",
-  "nav.logout": "Çıxış",
-  "hero.title": "İş cibində",
-  "hero.subtitle": "Azərbaycanda karyeranı bir toxunuşla idarə et — axtar, müraciət et, işə düzəl.",
-  "hero.searchPlaceholder": "Vəzifə, açar söz və ya şirkət",
-  "hero.cityPlaceholder": "Şəhər",
-  "hero.searchButton": "Axtar",
-  "jobs.title": "Vakansiyalar",
-  "jobs.empty": "Bu meyarlara uyğun vakansiya tapılmadı. Filtri dəyişib yenidən yoxlayın.",
-  "jobs.apply": "Müraciət et",
-  "jobs.applied": "Müraciət olunub",
-  "jobs.save": "Yadda saxla",
-  "common.remote": "Uzaqdan",
-  "common.viewAll": "Hamısına bax"
-};
-
-const ru: Dict = {
-  "nav.jobs": "Вакансии",
-  "nav.companies": "Компании",
-  "nav.blog": "Блог",
-  "nav.about": "О нас",
-  "nav.contact": "Контакты",
-  "nav.login": "Войти",
-  "nav.register": "Регистрация",
-  "nav.dashboard": "Панель",
-  "nav.logout": "Выход",
-  "hero.title": "Работа в кармане",
-  "hero.subtitle": "Управляйте карьерой в Азербайджане в одно касание — ищите, откликайтесь, устраивайтесь.",
-  "hero.searchPlaceholder": "Должность, ключевое слово или компания",
-  "hero.cityPlaceholder": "Город",
-  "hero.searchButton": "Искать",
-  "jobs.title": "Вакансии",
-  "jobs.empty": "По этим критериям вакансий не найдено. Измените фильтр и попробуйте снова.",
-  "jobs.apply": "Откликнуться",
-  "jobs.applied": "Отклик отправлен",
-  "jobs.save": "Сохранить",
-  "common.remote": "Удалённо",
-  "common.viewAll": "Смотреть все"
-};
-
-const dictionaries: Record<Locale, Dict> = { az, ru };
-
-export function getDictionary(locale: Locale = defaultLocale) {
-  const dict = dictionaries[locale] ?? az;
-  return (key: string): string => dict[key] ?? az[key] ?? key;
+/** Reads the visitor's locale from the NEXT_LOCALE cookie (default: az). */
+export async function getLocale(): Promise<Locale> {
+  const store = await cookies();
+  const value = store.get(LOCALE_COOKIE)?.value;
+  return isLocale(value) ? value : defaultLocale;
 }
+
+/** Server-side dictionary for the current request's locale. */
+export async function getDictionary(): Promise<Dictionary> {
+  return dictionaries[await getLocale()];
+}
+
+export { locales, defaultLocale, localeNames, localeShort, localeHtmlLang, isLocale } from "./config";
+export type { Locale } from "./config";

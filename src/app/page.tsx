@@ -4,6 +4,7 @@ import { Search, MapPin, Bell, CheckCircle2, Building2, Users } from "lucide-rea
 import { ButtonLink } from "@/components/ui/button";
 import { JobCard } from "@/components/jobs/job-card";
 import { latestJobs } from "@/lib/jobs/service";
+import { getDictionary } from "@/lib/i18n";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" }
@@ -14,7 +15,14 @@ export const revalidate = 120;
 export default async function HomePage() {
   // Resilient at build/ISR time: if the API is briefly unreachable, still
   // render the page (empty state) instead of failing the whole deploy.
-  const jobs = await latestJobs(6).catch(() => []);
+  const [jobs, dict] = await Promise.all([latestJobs(6).catch(() => []), getDictionary()]);
+  const h = dict.home;
+
+  const props = [
+    { icon: Search, title: h.prop1Title, text: h.prop1Text },
+    { icon: Bell, title: h.prop2Title, text: h.prop2Text },
+    { icon: Building2, title: h.prop3Title, text: h.prop3Text }
+  ];
 
   return (
     <>
@@ -24,15 +32,12 @@ export default async function HomePage() {
           <div className="flex flex-col justify-center animate-fade-up">
             <span className="mb-4 inline-flex w-fit items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium text-primary">
               <span className="h-1.5 w-1.5 rounded-full bg-success" />
-              Azərbaycanın iş platforması
+              {h.badge}
             </span>
             <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-ink sm:text-5xl lg:text-6xl">
-              İş cibində.
+              {h.heroTitle}
             </h1>
-            <p className="mt-5 max-w-md text-lg text-muted">
-              Karyeranı bir toxunuşla idarə et — axtar, müraciət et, işə düzəl. İşəgötürənlər üçün
-              vakansiya yerləşdirmə və namizəd axtarışı.
-            </p>
+            <p className="mt-5 max-w-md text-lg text-muted">{h.heroSubtitle}</p>
 
             {/* Search */}
             <form action="/jobs" className="mt-8 flex flex-col gap-2 sm:flex-row">
@@ -40,7 +45,8 @@ export default async function HomePage() {
                 <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
                 <input
                   name="q"
-                  placeholder="Vəzifə, açar söz və ya şirkət"
+                  placeholder={h.searchPlaceholder}
+                  aria-label={h.searchPlaceholder}
                   className="h-12 w-full rounded-md border border-border bg-surface pl-10 pr-3 text-sm text-ink placeholder:text-muted focus:border-primary focus:outline-none"
                 />
               </div>
@@ -48,21 +54,22 @@ export default async function HomePage() {
                 <MapPin className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
                 <input
                   name="city"
-                  placeholder="Şəhər"
+                  placeholder={h.cityPlaceholder}
+                  aria-label={h.cityPlaceholder}
                   className="h-12 w-full rounded-md border border-border bg-surface pl-10 pr-3 text-sm text-ink placeholder:text-muted focus:border-primary focus:outline-none"
                 />
               </div>
               <button className="h-12 rounded-md bg-primary px-6 text-sm font-medium text-primary-fg transition-all hover:brightness-110">
-                Axtar
+                {h.searchButton}
               </button>
             </form>
 
             <div className="mt-6 flex items-center gap-6 text-sm text-muted">
               <Link href="/sign-up" className="link-muted underline-offset-4 hover:underline">
-                İş axtaran kimi başla
+                {h.startAsSeeker}
               </Link>
               <Link href="/sign-up" className="link-muted underline-offset-4 hover:underline">
-                Vakansiya yerləşdir
+                {h.postJob}
               </Link>
             </div>
           </div>
@@ -76,11 +83,7 @@ export default async function HomePage() {
 
       {/* Value props */}
       <section className="container-page grid gap-6 py-16 sm:grid-cols-3">
-        {[
-          { icon: Search, title: "Ağıllı axtarış", text: "Vəzifə, şəhər, iş növü və maaşa görə filtrlə." },
-          { icon: Bell, title: "Anlıq bildirişlər", text: "Müraciətinin statusu dəyişəndə xəbərdar ol." },
-          { icon: Building2, title: "Yoxlanılmış şirkətlər", text: "Yalnız təsdiqlənmiş işəgötürənlər vakansiya yerləşdirir." }
-        ].map((f) => (
+        {props.map((f) => (
           <div key={f.title} className="rounded-lg border border-border bg-surface p-6 shadow-card">
             <span className="flex h-10 w-10 items-center justify-center rounded-md bg-primary-tint text-primary">
               <f.icon className="h-5 w-5" />
@@ -94,9 +97,9 @@ export default async function HomePage() {
       {/* Latest jobs */}
       <section className="container-page py-8 pb-20">
         <div className="mb-6 flex items-end justify-between">
-          <h2 className="font-display text-2xl font-bold text-ink">Son vakansiyalar</h2>
+          <h2 className="font-display text-2xl font-bold text-ink">{h.latestJobs}</h2>
           <Link href="/jobs" className="text-sm font-medium text-primary hover:underline">
-            Hamısına bax
+            {h.viewAll}
           </Link>
         </div>
 
@@ -108,10 +111,8 @@ export default async function HomePage() {
           </div>
         ) : (
           <div className="rounded-lg border border-dashed border-border p-12 text-center">
-            <p className="text-muted">
-              Hələ aktiv vakansiya yoxdur. İlk vakansiyanı sən yerləşdir.
-            </p>
-            <ButtonLink href="/sign-up" className="mt-4">Vakansiya yerləşdir</ButtonLink>
+            <p className="text-muted">{h.emptyJobs}</p>
+            <ButtonLink href="/sign-up" className="mt-4">{h.postJob}</ButtonLink>
           </div>
         )}
       </section>

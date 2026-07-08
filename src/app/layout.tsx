@@ -5,6 +5,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Providers } from "@/components/providers";
 import { env } from "@/lib/env";
+import { getLocale, localeHtmlLang } from "@/lib/i18n";
 import "./globals.css";
 
 const display = Space_Grotesk({
@@ -70,10 +71,14 @@ const siteJsonLd = {
   }
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getLocale();
   return (
     <ClerkProvider>
-      <html lang="az" className={`${display.variable} ${body.variable} ${mono.variable}`}>
+      <html
+        lang={localeHtmlLang[locale]}
+        className={`${display.variable} ${body.variable} ${mono.variable}`}
+      >
         <head>
           <script
             type="application/ld+json"
