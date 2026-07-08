@@ -6,6 +6,8 @@ import { Footer } from "@/components/layout/footer";
 import { Providers } from "@/components/providers";
 import { env } from "@/lib/env";
 import { getLocale, localeHtmlLang } from "@/lib/i18n";
+import { getTheme } from "@/lib/theme-server";
+import { cn } from "@/lib/utils";
 import "./globals.css";
 
 const display = Space_Grotesk({
@@ -72,12 +74,12 @@ const siteJsonLd = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const locale = await getLocale();
+  const [locale, theme] = await Promise.all([getLocale(), getTheme()]);
   return (
     <ClerkProvider>
       <html
         lang={localeHtmlLang[locale]}
-        className={`${display.variable} ${body.variable} ${mono.variable}`}
+        className={cn(display.variable, body.variable, mono.variable, theme === "dark" && "dark")}
       >
         <head>
           <script

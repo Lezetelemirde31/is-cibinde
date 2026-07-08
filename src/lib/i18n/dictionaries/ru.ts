@@ -80,6 +80,7 @@ export const ru: Dictionary = {
     ariaLabel: "Уведомления"
   },
   common: {
-    languageLabel: "Язык"
+    languageLabel: "Язык",
+    themeLabel: "Сменить тему"
   }
 };

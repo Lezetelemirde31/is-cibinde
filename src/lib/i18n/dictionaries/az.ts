@@ -80,7 +80,8 @@ export const az = {
     ariaLabel: "Bildirişlər"
   },
   common: {
-    languageLabel: "Dil"
+    languageLabel: "Dil",
+    themeLabel: "Rejimi dəyiş"
   }
 };
 

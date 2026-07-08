@@ -80,6 +80,7 @@ export const en: Dictionary = {
     ariaLabel: "Notifications"
   },
   common: {
-    languageLabel: "Language"
+    languageLabel: "Language",
+    themeLabel: "Toggle theme"
   }
 };

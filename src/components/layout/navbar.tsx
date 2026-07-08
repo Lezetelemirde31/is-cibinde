@@ -3,16 +3,19 @@ import { Briefcase } from "lucide-react";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { ButtonLink } from "@/components/ui/button";
 import { getDictionary, getLocale } from "@/lib/i18n";
+import { getTheme } from "@/lib/theme-server";
 import { getCurrentUser } from "@/lib/auth";
 import { listNotifications, unreadCount } from "@/lib/notifications/service";
 import { NavLinks } from "./nav-links";
 import { LanguageSwitcher } from "./language-switcher";
 import { NotificationBell } from "./notification-bell";
+import { ThemeToggle } from "./theme-toggle";
 
 export async function Navbar() {
-  const [dict, locale, user] = await Promise.all([
+  const [dict, locale, theme, user] = await Promise.all([
     getDictionary(),
     getLocale(),
+    getTheme(),
     getCurrentUser()
   ]);
 
@@ -40,6 +43,7 @@ export async function Navbar() {
         <NavLinks className="hidden md:flex" labels={dict.nav} />
 
         <div className="flex items-center gap-2">
+          <ThemeToggle current={theme} label={dict.common.themeLabel} />
           <LanguageSwitcher current={locale} label={dict.common.languageLabel} />
           {bell}
           <SignedIn>
