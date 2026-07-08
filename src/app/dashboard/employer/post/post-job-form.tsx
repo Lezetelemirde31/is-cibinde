@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { z } from "zod";
-import { createJobAction } from "../actions";
+import { createJobAction, updateJobAction } from "../actions";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -37,7 +37,13 @@ const clientSchema = z.object({
 
 type FormValues = z.infer<typeof clientSchema>;
 
-export function PostJobForm() {
+export function PostJobForm({
+  initial,
+  jobId
+}: {
+  initial?: Partial<FormValues>;
+  jobId?: string;
+}) {
   const router = useRouter();
   const [serverError, setServerError] = useState<string>();
   const {
@@ -46,7 +52,7 @@ export function PostJobForm() {
     formState: { errors, isSubmitting }
   } = useForm<FormValues>({
     resolver: zodResolver(clientSchema),
-    defaultValues: { employmentType: "full_time" }
+    defaultValues: { employmentType: "full_time", ...initial }
   });
 
   async function onSubmit(values: FormValues) {
@@ -55,7 +61,9 @@ export function PostJobForm() {
     Object.entries(values).forEach(([k, v]) => {
       if (v !== undefined && v !== null) fd.set(k, typeof v === "boolean" ? (v ? "true" : "") : String(v));
     });
-    const res = await createJobAction({}, fd);
+    const res = jobId
+      ? await updateJobAction(jobId, {}, fd)
+      : await createJobAction({}, fd);
     if (res.error) return setServerError(res.error);
     if (res.fieldErrors) return setServerError(Object.values(res.fieldErrors)[0]);
     router.push("/dashboard/employer/jobs");
@@ -146,7 +154,11 @@ export function PostJobForm() {
       {serverError && <p className="text-sm text-danger">{serverError}</p>}
 
       <Button type="submit" size="lg" disabled={isSubmitting}>
-        {isSubmitting ? "Yerləşdirilir…" : "Vakansiyanı dərc et"}
+        {isSubmitting
+          ? "Yadda saxlanılır…"
+          : jobId
+            ? "Dəyişiklikləri yadda saxla"
+            : "Vakansiyanı dərc et"}
       </Button>
     </form>
   );

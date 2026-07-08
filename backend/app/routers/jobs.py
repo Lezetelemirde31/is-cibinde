@@ -155,3 +155,26 @@ def has_applied(job_id: UUID, user: User | None = Depends(get_optional_user), db
 def save_job(job_id: UUID, user: User = Depends(get_current_user), db: Session = DbDep):
     saved = jobs_service.toggle_save_job(db, user_id=user.id, job_id=job_id)
     return {"saved": saved}
+
+
+@router.get("/jobs/{job_id}/edit", response_model=JobDetail)
+def get_job_for_edit(job_id: UUID, user: User = Depends(require_roles("employer")), db: Session = DbDep):
+    row = jobs_service.get_job_for_owner(db, job_id, user.id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Vakansiya tapılmadı")
+    return _job_detail_dict(*row)
+
+
+@router.patch("/jobs/{job_id}", response_model=JobDetail)
+def update_job(
+    job_id: UUID,
+    payload: JobCreateIn,
+    user: User = Depends(require_roles("employer")),
+    db: Session = DbDep,
+):
+    skills = [s.strip() for s in (payload.skills or "").split(",") if s.strip()]
+    ok = jobs_service.update_job(db, job_id, user.id, {**payload.model_dump(), "skills": skills})
+    if not ok:
+        raise HTTPException(status_code=403, detail="İcazə yoxdur")
+    row = jobs_service.get_job_for_owner(db, job_id, user.id)
+    return _job_detail_dict(*row)

@@ -142,6 +142,37 @@ def jobs_by_company(db: Session, company_id: str):
     ).all()
 
 
+def get_job_for_owner(db: Session, job_id, owner_id):
+    return db.execute(
+        select(Job, Company, Category)
+        .join(Company, Job.company_id == Company.id)
+        .outerjoin(Category, Job.category_id == Category.id)
+        .where(Job.id == job_id, Job.posted_by_id == owner_id)
+        .limit(1)
+    ).first()
+
+
+def update_job(db: Session, job_id, owner_id, data: dict) -> bool:
+    job = db.get(Job, job_id)
+    if not job or str(job.posted_by_id) != str(owner_id):
+        return False
+    job.title = data["title"]
+    job.category_id = data.get("category_id") or None
+    job.description = data["description"]
+    job.responsibilities = data.get("responsibilities") or None
+    job.requirements = data.get("requirements") or None
+    job.employment_type = data["employment_type"]
+    job.experience_level = data.get("experience_level") or None
+    job.city = data.get("city") or None
+    job.is_remote = bool(data.get("is_remote"))
+    job.salary_min = data.get("salary_min")
+    job.salary_max = data.get("salary_max")
+    job.salary_hidden = bool(data.get("salary_hidden"))
+    job.skills = data.get("skills") or []
+    db.commit()
+    return True
+
+
 def set_job_status(db: Session, job_id: str, status: str) -> None:
     job = db.get(Job, job_id)
     if not job:

@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth";
 import { ApiError } from "@/lib/api-client";
 import { jobSchema } from "@/lib/validation";
-import { createJob, changeJobStatus } from "@/lib/jobs/service";
+import { createJob, changeJobStatus, updateJob } from "@/lib/jobs/service";
 import { updateApplicationStatus } from "@/lib/applications/service";
 import { toggleSaveCandidate } from "@/lib/candidates/service";
 import { updateMyCompany } from "@/lib/companies/service";
@@ -49,6 +49,46 @@ export async function createJobAction(
     return { error: err instanceof ApiError ? err.message : "Vakansiya yaradıla bilmədi." };
   }
 
+  revalidatePath("/dashboard/employer/jobs");
+  revalidatePath("/jobs");
+  return {};
+}
+
+export async function updateJobAction(
+  jobId: string,
+  _prev: JobFormState,
+  formData: FormData
+): Promise<JobFormState> {
+  await requireRole(["employer"]);
+  const parsed = jobSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) {
+    const fieldErrors: Record<string, string> = {};
+    for (const issue of parsed.error.issues) {
+      const k = String(issue.path[0] ?? "form");
+      if (!fieldErrors[k]) fieldErrors[k] = issue.message;
+    }
+    return { fieldErrors };
+  }
+  const d = parsed.data;
+  try {
+    await updateJob(jobId, {
+      title: d.title,
+      categoryId: d.categoryId || undefined,
+      description: d.description,
+      responsibilities: d.responsibilities || undefined,
+      requirements: d.requirements || undefined,
+      employmentType: d.employmentType,
+      experienceLevel: d.experienceLevel || undefined,
+      city: d.city || undefined,
+      isRemote: Boolean(d.isRemote),
+      salaryMin: Number.isFinite(d.salaryMin as number) ? (d.salaryMin as number) : undefined,
+      salaryMax: Number.isFinite(d.salaryMax as number) ? (d.salaryMax as number) : undefined,
+      salaryHidden: Boolean(d.salaryHidden),
+      skills: d.skills
+    });
+  } catch (err) {
+    return { error: err instanceof ApiError ? err.message : "Yadda saxlanılmadı" };
+  }
   revalidatePath("/dashboard/employer/jobs");
   revalidatePath("/jobs");
   return {};

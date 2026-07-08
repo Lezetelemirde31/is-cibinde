@@ -47,7 +47,12 @@ export default async function EmployerJobsPage() {
                   <span>· {timeAgo(job.createdAt)}</span>
                 </div>
               </div>
-              <JobRowActions jobId={job.id} isClosed={job.status === "closed"} />
+              <div className="flex items-center gap-2">
+                <ButtonLink href={`/dashboard/employer/jobs/${job.id}/edit`} variant="secondary" size="sm">
+                  Düzəliş
+                </ButtonLink>
+                <JobRowActions jobId={job.id} isClosed={job.status === "closed"} />
+              </div>
             </div>
           ))}
         </div>

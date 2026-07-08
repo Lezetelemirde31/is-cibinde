@@ -141,6 +141,19 @@ export async function changeJobStatus(jobId: string, close: boolean): Promise<{ 
   return apiFetch(`/jobs/${jobId}/status`, { method: "PATCH", body: { close } });
 }
 
+export async function getJobForEdit(jobId: string): Promise<JobDetail | null> {
+  try {
+    return await apiFetch<JobDetail>(`/jobs/${jobId}/edit`);
+  } catch (err) {
+    if (err instanceof ApiError && err.status === 404) return null;
+    throw err;
+  }
+}
+
+export async function updateJob(jobId: string, input: CreateJobInput): Promise<JobDetail> {
+  return apiFetch(`/jobs/${jobId}`, { method: "PATCH", body: input });
+}
+
 export async function toggleSaveJob(jobId: string): Promise<{ saved: boolean }> {
   return apiFetch(`/jobs/${jobId}/save`, { method: "POST" });
 }
