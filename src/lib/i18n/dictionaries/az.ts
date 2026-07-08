@@ -28,7 +28,19 @@ export const az = {
     prop3Text: "Yalnız təsdiqlənmiş işəgötürənlər vakansiya yerləşdirir.",
     latestJobs: "Son vakansiyalar",
     viewAll: "Hamısına bax",
-    emptyJobs: "Hələ aktiv vakansiya yoxdur. İlk vakansiyanı sən yerləşdir."
+    emptyJobs: "Hələ aktiv vakansiya yoxdur. İlk vakansiyanı sən yerləşdir.",
+    howItWorksTitle: "Necə işləyir",
+    howItWorksSubtitle: "Üç sadə addımda işə başla.",
+    step1Title: "Qeydiyyatdan keç",
+    step1Text: "İş axtaran və ya işəgötürən kimi pulsuz hesab yarat.",
+    step2Title: "Axtar və ya yerləşdir",
+    step2Text: "Vakansiyalara müraciət et və ya öz elanını dərc et.",
+    step3Title: "İşə düzəl",
+    step3Text: "Müraciətlərini izlə və işəgötürənlərlə birbaşa əlaqə saxla.",
+    ctaTitle: "İşə başlamağa hazırsan?",
+    ctaText: "İş axtaran kimi karyerana başla və ya işəgötürən kimi ən yaxşı namizədləri tap.",
+    ctaSeeker: "Vakansiyalara bax",
+    ctaEmployer: "Vakansiya yerləşdir"
   },
   jobs: {
     title: "Vakansiyalar",

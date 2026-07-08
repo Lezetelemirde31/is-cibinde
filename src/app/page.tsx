@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Search, MapPin, Bell, CheckCircle2, Building2, Users } from "lucide-react";
+import { Search, MapPin, Bell, CheckCircle2, Building2, Users, UserPlus } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
 import { JobCard } from "@/components/jobs/job-card";
 import { latestJobs } from "@/lib/jobs/service";
@@ -22,6 +22,12 @@ export default async function HomePage() {
     { icon: Search, title: h.prop1Title, text: h.prop1Text },
     { icon: Bell, title: h.prop2Title, text: h.prop2Text },
     { icon: Building2, title: h.prop3Title, text: h.prop3Text }
+  ];
+
+  const steps = [
+    { icon: UserPlus, title: h.step1Title, text: h.step1Text },
+    { icon: Search, title: h.step2Title, text: h.step2Text },
+    { icon: CheckCircle2, title: h.step3Title, text: h.step3Text }
   ];
 
   return (
@@ -94,6 +100,32 @@ export default async function HomePage() {
         ))}
       </section>
 
+      {/* How it works */}
+      <section className="border-y border-border bg-panel">
+        <div className="container-page py-16">
+          <div className="text-center">
+            <h2 className="font-display text-2xl font-bold text-ink sm:text-3xl">
+              {h.howItWorksTitle}
+            </h2>
+            <p className="mt-2 text-muted">{h.howItWorksSubtitle}</p>
+          </div>
+          <div className="mx-auto mt-10 grid max-w-4xl gap-8 sm:grid-cols-3">
+            {steps.map((s, i) => (
+              <div key={s.title} className="text-center">
+                <span className="relative mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-fg shadow-lift">
+                  <s.icon className="h-6 w-6" />
+                  <span className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full border border-border bg-surface text-xs font-bold text-primary">
+                    {i + 1}
+                  </span>
+                </span>
+                <h3 className="mt-4 font-display text-lg font-semibold text-ink">{s.title}</h3>
+                <p className="mt-1.5 text-sm text-muted">{s.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Latest jobs */}
       <section className="container-page py-8 pb-20">
         <div className="mb-6 flex items-end justify-between">
@@ -115,6 +147,29 @@ export default async function HomePage() {
             <ButtonLink href="/sign-up" className="mt-4">{h.postJob}</ButtonLink>
           </div>
         )}
+      </section>
+
+      {/* Call to action */}
+      <section className="container-page pb-20">
+        <div className="relative overflow-hidden rounded-2xl bg-primary px-6 py-14 text-center text-primary-fg sm:px-12">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-white/10" />
+          <div className="pointer-events-none absolute -bottom-20 -left-10 h-56 w-56 rounded-full bg-white/5" />
+          <div className="relative">
+            <h2 className="font-display text-2xl font-bold sm:text-3xl">{h.ctaTitle}</h2>
+            <p className="mx-auto mt-3 max-w-xl text-primary-fg/80">{h.ctaText}</p>
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+              <ButtonLink href="/jobs" variant="secondary">
+                {h.ctaSeeker}
+              </ButtonLink>
+              <Link
+                href="/sign-up"
+                className="inline-flex h-11 items-center justify-center rounded-md border border-primary-fg/40 px-5 text-sm font-medium text-primary-fg transition-colors hover:bg-primary-fg/10"
+              >
+                {h.ctaEmployer}
+              </Link>
+            </div>
+          </div>
+        </div>
       </section>
     </>
   );

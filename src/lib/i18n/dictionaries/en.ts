@@ -28,7 +28,19 @@ export const en: Dictionary = {
     prop3Text: "Only verified employers can post vacancies.",
     latestJobs: "Latest jobs",
     viewAll: "View all",
-    emptyJobs: "No active vacancies yet. Be the first to post one."
+    emptyJobs: "No active vacancies yet. Be the first to post one.",
+    howItWorksTitle: "How it works",
+    howItWorksSubtitle: "Get started in three simple steps.",
+    step1Title: "Sign up",
+    step1Text: "Create a free account as a job seeker or an employer.",
+    step2Title: "Search or post",
+    step2Text: "Apply to vacancies or publish your own job listing.",
+    step3Title: "Get hired",
+    step3Text: "Track your applications and connect with employers directly.",
+    ctaTitle: "Ready to get started?",
+    ctaText: "Kick off your career as a job seeker, or find the best candidates as an employer.",
+    ctaSeeker: "Browse jobs",
+    ctaEmployer: "Post a job"
   },
   jobs: {
     title: "Jobs",
