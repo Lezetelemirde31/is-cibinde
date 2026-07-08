@@ -39,19 +39,22 @@ export function formatSalary(
 export function timeAgo(date: Date | string): string {
   const d = typeof date === "string" ? new Date(date) : date;
   const seconds = Math.floor((Date.now() - d.getTime()) / 1000);
-  const units: Array<[number, string]> = [
-    [60, "saniyə"],
-    [3600, "dəqiqə"],
-    [86400, "saat"],
-    [604800, "gün"],
-    [2592000, "həftə"],
-    [31536000, "ay"]
-  ];
+  if (seconds < 0) return "indicə"; // guard against clock skew (future dates)
   if (seconds < 60) return "indicə";
+
+  // [divisor in seconds, label]. The divisor and its label must match.
+  const units: Array<[number, string]> = [
+    [60, "dəqiqə"],
+    [3600, "saat"],
+    [86400, "gün"],
+    [604800, "həftə"],
+    [2592000, "ay"],
+    [31536000, "il"]
+  ];
   for (let i = units.length - 1; i >= 0; i--) {
-    const [limit, label] = units[i];
-    if (seconds >= limit) {
-      const value = Math.floor(seconds / limit);
+    const [divisor, label] = units[i];
+    if (seconds >= divisor) {
+      const value = Math.floor(seconds / divisor);
       return `${value} ${label} əvvəl`;
     }
   }
