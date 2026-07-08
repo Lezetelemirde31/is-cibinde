@@ -31,16 +31,19 @@ export async function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-surface/80 backdrop-blur">
       <div className="container-page flex h-16 items-center justify-between gap-6">
-        <Link href="/" className="flex items-center gap-2" aria-label="İş Cibində">
-          <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-fg">
-            <Briefcase className="h-4 w-4" />
-          </span>
-          <span className="font-display text-lg font-bold tracking-tight text-ink">
-            İş Cibində
-          </span>
-        </Link>
+        {/* Left: logo + primary nav grouped together (LinkedIn/Indeed style) */}
+        <div className="flex items-center gap-8">
+          <Link href="/" className="flex items-center gap-2" aria-label="İş Cibində">
+            <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-fg">
+              <Briefcase className="h-4 w-4" />
+            </span>
+            <span className="font-display text-lg font-bold tracking-tight text-ink">
+              İş Cibində
+            </span>
+          </Link>
 
-        <NavLinks className="hidden md:flex" labels={dict.nav} />
+          <NavLinks className="hidden md:flex" labels={dict.nav} />
+        </div>
 
         <div className="flex items-center gap-2">
           <ThemeToggle current={theme} label={dict.common.themeLabel} />
