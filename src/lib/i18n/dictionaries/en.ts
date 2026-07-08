@@ -92,6 +92,19 @@ export const en: Dictionary = {
     empty: "No notifications yet",
     ariaLabel: "Notifications"
   },
+  support: {
+    label: "Help",
+    title: "Help center",
+    greeting: "Hi! 👋 How can we help you?",
+    q1: "How do I apply to a job?",
+    a1: "Create an account, fill in your profile, and press “Apply” on any job you like.",
+    q2: "How do I register as an employer?",
+    a2: "During sign-up choose the “Employer” role, create your company profile and post a job.",
+    q3: "Is the service free?",
+    a3: "For job seekers, registration, profiles and applications are completely free.",
+    contactCta: "Have another question?",
+    contactButton: "Contact us"
+  },
   common: {
     languageLabel: "Language",
     themeLabel: "Toggle theme"

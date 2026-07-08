@@ -92,6 +92,19 @@ export const az = {
     empty: "Hələ bildiriş yoxdur",
     ariaLabel: "Bildirişlər"
   },
+  support: {
+    label: "Yardım",
+    title: "Kömək mərkəzi",
+    greeting: "Salam! 👋 Sizə necə kömək edə bilərik?",
+    q1: "Vakansiyaya necə müraciət edim?",
+    a1: "Hesab yaradın, profilinizi doldurun və istədiyiniz vakansiyada “Müraciət et” düyməsinə basın.",
+    q2: "Şirkət kimi necə qeydiyyatdan keçim?",
+    a2: "Qeydiyyatdan keçərkən “İşəgötürən” rolunu seçin, şirkət profilinizi yaradın və vakansiya yerləşdirin.",
+    q3: "Xidmət pulludurmu?",
+    a3: "İş axtaranlar üçün qeydiyyat, profil və müraciət tamamilə pulsuzdur.",
+    contactCta: "Başqa sualınız var?",
+    contactButton: "Bizə yazın"
+  },
   common: {
     languageLabel: "Dil",
     themeLabel: "Rejimi dəyiş"

@@ -5,8 +5,9 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Providers } from "@/components/providers";
 import { env } from "@/lib/env";
-import { getLocale, localeHtmlLang } from "@/lib/i18n";
+import { getDictionary, getLocale, localeHtmlLang } from "@/lib/i18n";
 import { getTheme } from "@/lib/theme-server";
+import { SupportWidget } from "@/components/layout/support-widget";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
@@ -74,7 +75,7 @@ const siteJsonLd = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const [locale, theme] = await Promise.all([getLocale(), getTheme()]);
+  const [locale, theme, dict] = await Promise.all([getLocale(), getTheme(), getDictionary()]);
   return (
     <ClerkProvider>
       <html
@@ -104,6 +105,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               {children}
             </main>
             <Footer />
+            <SupportWidget labels={dict.support} />
           </Providers>
         </body>
       </html>
