@@ -3,8 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { requireUser } from "@/lib/auth";
 import { getConversationThread } from "@/lib/messaging/service";
-import { timeAgo } from "@/lib/utils";
-import { MessageComposer } from "../message-composer";
+import { Conversation } from "./conversation";
 
 export const metadata = { title: "Söhbət" };
 
@@ -23,31 +22,7 @@ export default async function ConversationPage({ params }: { params: Promise<{ i
         <span className="font-display font-semibold text-ink">Söhbət</span>
       </div>
 
-      <div className="flex-1 space-y-3 overflow-y-auto p-4">
-        {data.messages.length === 0 ? (
-          <p className="text-center text-sm text-muted">İlk mesajı yaz.</p>
-        ) : (
-          data.messages.map((m) => {
-            const mine = m.senderId === user.id;
-            return (
-              <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
-                <div
-                  className={`max-w-[75%] rounded-lg px-3.5 py-2 text-sm ${
-                    mine ? "bg-primary text-primary-fg" : "border border-border bg-surface text-ink"
-                  }`}
-                >
-                  <p className="whitespace-pre-wrap">{m.body}</p>
-                  <p className={`mt-1 text-[10px] ${mine ? "text-primary-fg/70" : "text-muted"}`}>
-                    {timeAgo(m.createdAt)}
-                  </p>
-                </div>
-              </div>
-            );
-          })
-        )}
-      </div>
-
-      <MessageComposer conversationId={id} />
+      <Conversation conversationId={id} initialMessages={data.messages} currentUserId={user.id} />
     </div>
   );
 }
