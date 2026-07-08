@@ -87,6 +87,29 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Latest jobs — front and centre so real listings show immediately */}
+      <section className="container-page py-14">
+        <div className="mb-6 flex items-end justify-between">
+          <h2 className="font-display text-2xl font-bold text-ink">{h.latestJobs}</h2>
+          <Link href="/jobs" className="text-sm font-medium text-primary hover:underline">
+            {h.viewAll}
+          </Link>
+        </div>
+
+        {jobs.length ? (
+          <div className="grid gap-4 md:grid-cols-2">
+            {jobs.map((job) => (
+              <JobCard key={job.id} job={job} />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-lg border border-dashed border-border p-12 text-center">
+            <p className="text-muted">{h.emptyJobs}</p>
+            <ButtonLink href="/sign-up" className="mt-4">{h.postJob}</ButtonLink>
+          </div>
+        )}
+      </section>
+
       {/* Value props */}
       <section className="container-page grid gap-6 py-16 sm:grid-cols-3">
         {props.map((f) => (
@@ -124,29 +147,6 @@ export default async function HomePage() {
             ))}
           </div>
         </div>
-      </section>
-
-      {/* Latest jobs */}
-      <section className="container-page py-8 pb-20">
-        <div className="mb-6 flex items-end justify-between">
-          <h2 className="font-display text-2xl font-bold text-ink">{h.latestJobs}</h2>
-          <Link href="/jobs" className="text-sm font-medium text-primary hover:underline">
-            {h.viewAll}
-          </Link>
-        </div>
-
-        {jobs.length ? (
-          <div className="grid gap-4 md:grid-cols-2">
-            {jobs.map((job) => (
-              <JobCard key={job.id} job={job} />
-            ))}
-          </div>
-        ) : (
-          <div className="rounded-lg border border-dashed border-border p-12 text-center">
-            <p className="text-muted">{h.emptyJobs}</p>
-            <ButtonLink href="/sign-up" className="mt-4">{h.postJob}</ButtonLink>
-          </div>
-        )}
       </section>
 
       {/* Call to action */}
