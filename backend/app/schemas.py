@@ -202,6 +202,16 @@ class CompanyDetail(BaseModel):
     open_jobs: list[JobListItem]
 
 
+class CompanyUpdateIn(BaseModel):
+    name: str = Field(min_length=2, max_length=200)
+    logo_url: str | None = Field(default=None, max_length=500)
+    website: str | None = Field(default=None, max_length=300)
+    industry: str | None = Field(default=None, max_length=120)
+    size_range: str | None = Field(default=None, max_length=40)
+    city: str | None = Field(default=None, max_length=120)
+    about: str | None = Field(default=None, max_length=3000)
+
+
 # ------------------------------------------------------------------ #
 # Candidates (employer-facing search)                                  #
 # ------------------------------------------------------------------ #

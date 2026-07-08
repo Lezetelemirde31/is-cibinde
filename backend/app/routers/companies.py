@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.deps import DbDep, require_roles
 from app.models import User
-from app.schemas import CompanyDetail, CompanyListResponse, CompanySummary
+from app.schemas import CompanyDetail, CompanyListResponse, CompanySummary, CompanyUpdateIn
 from app.services import companies as companies_service
 
 router = APIRouter(tags=["companies"])
@@ -17,6 +17,16 @@ def list_companies(db: Session = DbDep, q: str | None = None, page: int = 1):
 @router.get("/companies/mine", response_model=CompanySummary | None)
 def company_for_owner(user: User = Depends(require_roles("employer")), db: Session = DbDep):
     return companies_service.company_for_owner(db, user.id)
+
+
+@router.patch("/companies/mine", response_model=CompanySummary)
+def update_my_company(
+    payload: CompanyUpdateIn, user: User = Depends(require_roles("employer")), db: Session = DbDep
+):
+    company = companies_service.update_company_for_owner(db, user.id, payload.model_dump())
+    if not company:
+        raise HTTPException(status_code=404, detail="Şirkət tapılmadı")
+    return company
 
 
 @router.get("/companies/{slug}", response_model=CompanyDetail)

@@ -36,3 +36,17 @@ export async function getCompanyBySlug(
 export async function companyForOwner(): Promise<CompanySummary | null> {
   return apiFetch<CompanySummary | null>("/companies/mine");
 }
+
+export type CompanyUpdateInput = {
+  name: string;
+  logoUrl?: string;
+  website?: string;
+  industry?: string;
+  sizeRange?: string;
+  city?: string;
+  about?: string;
+};
+
+export async function updateMyCompany(input: CompanyUpdateInput): Promise<CompanySummary> {
+  return apiFetch("/companies/mine", { method: "PATCH", body: input });
+}

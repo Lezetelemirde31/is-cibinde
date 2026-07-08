@@ -53,3 +53,19 @@ def get_company_by_slug(db: Session, slug: str):
 
 def company_for_owner(db: Session, owner_id):
     return db.scalar(select(Company).where(Company.owner_id == owner_id))
+
+
+def update_company_for_owner(db: Session, owner_id, data: dict):
+    company = db.scalar(select(Company).where(Company.owner_id == owner_id))
+    if not company:
+        return None
+    company.name = data["name"]
+    company.logo_url = data.get("logo_url") or None
+    company.website = data.get("website") or None
+    company.industry = data.get("industry") or None
+    company.size_range = data.get("size_range") or None
+    company.city = data.get("city") or None
+    company.about = data.get("about") or None
+    db.commit()
+    db.refresh(company)
+    return company

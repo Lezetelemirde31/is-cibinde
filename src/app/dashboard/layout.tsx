@@ -30,6 +30,7 @@ const navByRole: Record<string, NavItem[]> = {
   ],
   employer: [
     { href: "/dashboard", label: "İcmal", icon: LayoutDashboard },
+    { href: "/dashboard/employer/company", label: "Şirkət profili", icon: Building2 },
     { href: "/dashboard/employer/post", label: "Vakansiya yerləşdir", icon: PlusCircle },
     { href: "/dashboard/employer/jobs", label: "Vakansiyalarım", icon: Briefcase },
     { href: "/dashboard/employer/applications", label: "Müraciətlər", icon: Inbox },

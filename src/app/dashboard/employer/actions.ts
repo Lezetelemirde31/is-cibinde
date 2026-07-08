@@ -7,6 +7,8 @@ import { jobSchema } from "@/lib/validation";
 import { createJob, changeJobStatus } from "@/lib/jobs/service";
 import { updateApplicationStatus } from "@/lib/applications/service";
 import { toggleSaveCandidate } from "@/lib/candidates/service";
+import { updateMyCompany } from "@/lib/companies/service";
+import { z } from "zod";
 
 export type JobFormState = { error?: string; fieldErrors?: Record<string, string> };
 
@@ -72,4 +74,40 @@ export async function toggleSaveCandidateAction(candidateId: string) {
   const res = await toggleSaveCandidate(candidateId);
   revalidatePath("/dashboard/employer/candidates");
   return res;
+}
+
+const companySchema = z.object({
+  name: z.string().trim().min(2, "Şirkət adı çox qısadır").max(200),
+  logoUrl: z.string().trim().max(500).optional(),
+  website: z.string().trim().max(300).optional(),
+  industry: z.string().trim().max(120).optional(),
+  sizeRange: z.string().trim().max(40).optional(),
+  city: z.string().trim().max(120).optional(),
+  about: z.string().trim().max(3000).optional()
+});
+
+export type CompanyFormState = { ok?: boolean; error?: string; fieldErrors?: Record<string, string> };
+
+export async function updateCompanyAction(
+  _prev: CompanyFormState,
+  formData: FormData
+): Promise<CompanyFormState> {
+  await requireRole(["employer"]);
+  const parsed = companySchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) {
+    const fieldErrors: Record<string, string> = {};
+    for (const i of parsed.error.issues) {
+      const k = String(i.path[0] ?? "form");
+      if (!fieldErrors[k]) fieldErrors[k] = i.message;
+    }
+    return { fieldErrors };
+  }
+  try {
+    await updateMyCompany(parsed.data);
+  } catch (err) {
+    return { error: err instanceof ApiError ? err.message : "Yadda saxlanılmadı" };
+  }
+  revalidatePath("/dashboard/employer/company");
+  revalidatePath("/companies");
+  return { ok: true };
 }
