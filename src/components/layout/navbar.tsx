@@ -34,7 +34,7 @@ export async function Navbar() {
       <div className="container-page flex h-16 items-center justify-between gap-3 sm:gap-6">
         {/* Left: hamburger (mobile) + logo + primary nav (LinkedIn/Indeed style) */}
         <div className="flex items-center gap-2 md:gap-8">
-          <MobileMenu labels={dict.nav} />
+          <MobileMenu labels={{ ...dict.nav, contact: dict.footer.contact }} />
 
           <Link href="/" className="flex items-center gap-2" aria-label="İş Cibində">
             <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-fg">

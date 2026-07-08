@@ -8,7 +8,8 @@ export const ru: Dictionary = {
     about: "О нас",
     signIn: "Войти",
     signUp: "Регистрация",
-    dashboard: "Панель"
+    dashboard: "Панель",
+    faq: "Вопросы"
   },
   home: {
     badge: "Платформа вакансий Азербайджана",

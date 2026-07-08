@@ -8,7 +8,8 @@ export const az = {
     about: "Haqqımızda",
     signIn: "Daxil ol",
     signUp: "Qeydiyyat",
-    dashboard: "Panel"
+    dashboard: "Panel",
+    faq: "Suallar"
   },
   home: {
     badge: "Azərbaycanın iş platforması",

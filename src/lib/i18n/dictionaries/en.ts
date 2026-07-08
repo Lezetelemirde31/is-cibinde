@@ -8,7 +8,8 @@ export const en: Dictionary = {
     about: "About",
     signIn: "Sign in",
     signUp: "Sign up",
-    dashboard: "Dashboard"
+    dashboard: "Dashboard",
+    faq: "FAQ"
   },
   home: {
     badge: "Azerbaijan's job platform",
